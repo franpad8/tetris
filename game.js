@@ -1,17 +1,16 @@
-const WIDTH = 15
-const HEIGHT = 30
-const PIXELS_PER_SQUARE = 30
-
+import { WIDTH, HEIGHT, PIXELS_PER_SQUARE } from './const'
+import Board from './board'
 export default class Game {
   init () {
     const canvas = document.getElementById('canvas')
-    const context = canvas.getContext('2d')
-    context.fillStyle = '#000'
-    context.rect(0, 0, WIDTH * PIXELS_PER_SQUARE, HEIGHT * PIXELS_PER_SQUARE)
-    context.fill()
+    this.context = canvas.getContext('2d')
+    this.context.fillStyle = '#000'
+    this.context.rect(0, 0, WIDTH * PIXELS_PER_SQUARE, HEIGHT * PIXELS_PER_SQUARE)
+    this.context.fill()
+    this.board = new Board(this.context)
   }
 
   start () {
-
+    this.board.draw()
   }
 }
