@@ -1,4 +1,4 @@
-import { PIXELS_PER_SQUARE, WIDTH } from './const'
+import { PIXELS_PER_SQUARE, WIDTH, MOVEMENT_DIRECTION } from './const'
 
 export default class Piece {
   constructor (context) {
@@ -8,6 +8,17 @@ export default class Piece {
     ]
     this.position = { x: Math.floor(WIDTH / 2), y: 0 }
     this.context = context
+  }
+
+  move (direction) {
+    switch (direction) {
+      case MOVEMENT_DIRECTION.RIGHT:
+        this.position.x++
+        break
+      case MOVEMENT_DIRECTION.LEFT:
+        this.position.x--
+        break
+    }
   }
 
   draw () {
