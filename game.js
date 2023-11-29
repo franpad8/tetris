@@ -35,19 +35,38 @@ export default class Game {
   checkCollision () {
     return this.piece.shape.every((row, y) => {
       return row.every((value, x) => {
-        console.log(this.board.getValueAt(this.piece.position.x + x, this.piece.position.y + y))
         return value !== 1 || (this.board.getValueAt(this.piece.position.x + x, this.piece.position.y + y) !== 1 &&
                                this.board.getValueAt(this.piece.position.x + x, this.piece.position.y + y) !== undefined)
       })
     })
   }
 
+  solidify () {
+    this.piece.shape.forEach((row, y) => {
+      row.forEach((value, x) => {
+        if (value === 1) {
+          this.board.setValueAt(1, this.piece.position.x + x, this.piece.position.y + y)
+        }
+      })
+    })
+  }
+
   update (time) {
     delta = time - lastTime
-    if (delta > 1000) {
+    if (delta > 500) {
       this.board.draw()
       this.piece.draw()
       this.piece.fall()
+      if (!this.checkCollision()) {
+        this.piece.move(MOVEMENT_DIRECTION.UP)
+        if (this.piece.position.y === 0) { // Game Over
+          alert('Game Over!')
+          this.reset()
+        } else {
+          this.solidify()
+          this.piece.reset()
+        }
+      }
       lastTime = time
     }
     window.requestAnimationFrame(this.update)
@@ -55,5 +74,10 @@ export default class Game {
 
   start () {
     this.update()
+  }
+
+  reset () {
+    this.board.reset()
+    this.piece.reset()
   }
 }

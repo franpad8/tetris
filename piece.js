@@ -18,6 +18,9 @@ export default class Piece {
       case MOVEMENT_DIRECTION.LEFT:
         this.position.x--
         break
+      case MOVEMENT_DIRECTION.UP:
+        this.position.y--
+        break
     }
   }
 
@@ -36,5 +39,9 @@ export default class Piece {
 
   fall () {
     this.position.y++
+  }
+
+  reset () {
+    this.position = { x: Math.floor(WIDTH / 2), y: 0 }
   }
 }
