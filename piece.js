@@ -12,7 +12,6 @@ export default class Piece {
 
   draw () {
     this.shape.forEach((row, y) => row.forEach((value, x) => {
-      console.log(value)
       if (value === 1) {
         this.context.fillStyle = 'orangered'
         this.context.fillRect(
@@ -22,5 +21,9 @@ export default class Piece {
           PIXELS_PER_SQUARE)
       }
     }))
+  }
+
+  fall () {
+    this.position.y++
   }
 }

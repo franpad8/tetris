@@ -48,10 +48,13 @@ export default class Board {
   draw () {
     this.grid.forEach((row, y) => {
       this.grid[y].forEach((value, x) => {
-        if (value === 1) {
+        if (value === 0) {
+          this.context.fillStyle = 'black'
+        } else if (value === 1) {
           this.context.fillStyle = 'yellow'
-          this.context.fillRect(x * PIXELS_PER_SQUARE, y * PIXELS_PER_SQUARE, PIXELS_PER_SQUARE, PIXELS_PER_SQUARE)
         }
+
+        this.context.fillRect(x * PIXELS_PER_SQUARE, y * PIXELS_PER_SQUARE, PIXELS_PER_SQUARE, PIXELS_PER_SQUARE)
       })
     })
   }
