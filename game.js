@@ -28,12 +28,18 @@ export default class Game {
             this.piece.move(MOVEMENT_DIRECTION.LEFT)
           }
           break
+        case MOVEMENT_DIRECTION.UP:
+          this.piece.move(MOVEMENT_DIRECTION.ROTATE)
+          if (!this.checkCollision()) {
+            this.piece.move(MOVEMENT_DIRECTION.ROTATE)
+          }
+          break
       }
     })
   }
 
   checkCollision () {
-    return this.piece.shape.every((row, y) => {
+    return this.piece.shape.grid.every((row, y) => {
       return row.every((value, x) => {
         return value !== 1 || (this.board.getValueAt(this.piece.position.x + x, this.piece.position.y + y) !== 1 &&
                                this.board.getValueAt(this.piece.position.x + x, this.piece.position.y + y) !== undefined)
@@ -42,7 +48,7 @@ export default class Game {
   }
 
   solidify () {
-    this.piece.shape.forEach((row, y) => {
+    this.piece.shape.grid.forEach((row, y) => {
       row.forEach((value, x) => {
         if (value === 1) {
           this.board.setValueAt(1, this.piece.position.x + x, this.piece.position.y + y)
@@ -53,7 +59,7 @@ export default class Game {
 
   update (time) {
     delta = time - lastTime
-    if (delta > 500) {
+    if (delta > 200) {
       this.board.draw()
       this.piece.draw()
       this.piece.fall()

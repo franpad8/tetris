@@ -5,5 +5,6 @@ export const PIXELS_PER_SQUARE = 30
 export const MOVEMENT_DIRECTION = {
   RIGHT: 'ArrowRight',
   LEFT: 'ArrowLeft',
-  UP: 'ArrowUp'
+  UP: 'ArrowUp',
+  ROTATE: 'Rotate'
 }
