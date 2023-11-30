@@ -14,6 +14,10 @@ export default class Game {
     this.board = new Board(this.context)
     this.piece = new Piece(this.context)
     this.update = this.update.bind(this)
+    this.#registerEventsListeners()
+  }
+
+  #registerEventsListeners () {
     window.addEventListener('keydown', (event) => {
       switch (event.key) {
         case MOVEMENT_DIRECTION.LEFT:
@@ -33,6 +37,9 @@ export default class Game {
           if (!this.checkCollision()) {
             this.piece.move(MOVEMENT_DIRECTION.ROTATE)
           }
+          break
+        case MOVEMENT_DIRECTION.DOWN:
+          this.project()
           break
       }
     })
@@ -57,6 +64,24 @@ export default class Game {
     })
   }
 
+  project () {
+    while (this.checkCollision()) {
+      this.piece.fall()
+    }
+    this.#handleCollision()
+  }
+
+  #handleCollision () {
+    this.piece.move(MOVEMENT_DIRECTION.UP)
+    if (this.piece.position.y === 0) { // Game Over
+      alert('Game Over!')
+      this.reset()
+    } else {
+      this.solidify()
+      this.piece.reset()
+    }
+  }
+
   update (time) {
     delta = time - lastTime
     if (delta > 200) {
@@ -64,14 +89,7 @@ export default class Game {
       this.piece.draw()
       this.piece.fall()
       if (!this.checkCollision()) {
-        this.piece.move(MOVEMENT_DIRECTION.UP)
-        if (this.piece.position.y === 0) { // Game Over
-          alert('Game Over!')
-          this.reset()
-        } else {
-          this.solidify()
-          this.piece.reset()
-        }
+        this.#handleCollision()
       }
       lastTime = time
     }

@@ -6,5 +6,6 @@ export const MOVEMENT_DIRECTION = {
   RIGHT: 'ArrowRight',
   LEFT: 'ArrowLeft',
   UP: 'ArrowUp',
+  DOWN: 'ArrowDown',
   ROTATE: 'Rotate'
 }
