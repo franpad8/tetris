@@ -30,4 +30,19 @@ export default class Board {
   reset () {
     this.grid = Array(HEIGHT).fill(0).map(x => Array(WIDTH).fill(0))
   }
+
+  removeCompletedRows () {
+    const completedRowsIndexes = []
+    this.grid.forEach((row, rowIndex) => {
+      if (row.every((value) => value === 1)) {
+        completedRowsIndexes.push(rowIndex)
+      }
+    })
+    completedRowsIndexes.forEach(rowToDeleteIndex => {
+      this.grid.splice(rowToDeleteIndex, 1)
+      this.grid.unshift(Array(WIDTH).fill(0))
+    })
+
+    return completedRowsIndexes.length
+  }
 }

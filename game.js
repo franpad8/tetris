@@ -1,4 +1,4 @@
-import { WIDTH, HEIGHT, PIXELS_PER_SQUARE, MOVEMENT_DIRECTION } from './const'
+import { WIDTH, HEIGHT, PIXELS_PER_SQUARE, POINTS_PER_ROW, MOVEMENT_DIRECTION, MILLISECONDS_PER_FRAME } from './const'
 import Board from './board'
 import Piece from './piece'
 
@@ -22,30 +22,30 @@ export default class Game {
       switch (event.key) {
         case MOVEMENT_DIRECTION.LEFT:
           this.piece.move(MOVEMENT_DIRECTION.LEFT)
-          if (!this.checkCollision()) {
+          if (!this.#checkCollision()) {
             this.piece.move(MOVEMENT_DIRECTION.RIGHT)
           }
           break
         case MOVEMENT_DIRECTION.RIGHT:
           this.piece.move(MOVEMENT_DIRECTION.RIGHT)
-          if (!this.checkCollision()) {
+          if (!this.#checkCollision()) {
             this.piece.move(MOVEMENT_DIRECTION.LEFT)
           }
           break
         case MOVEMENT_DIRECTION.UP:
           this.piece.move(MOVEMENT_DIRECTION.ROTATE)
-          if (!this.checkCollision()) {
+          if (!this.#checkCollision()) {
             this.piece.move(MOVEMENT_DIRECTION.ROTATE)
           }
           break
         case MOVEMENT_DIRECTION.DOWN:
-          this.project()
+          this.#project()
           break
       }
     })
   }
 
-  checkCollision () {
+  #checkCollision () {
     return this.piece.shape.grid.every((row, y) => {
       return row.every((value, x) => {
         return value !== 1 || (this.board.getValueAt(this.piece.position.x + x, this.piece.position.y + y) !== 1 &&
@@ -54,7 +54,7 @@ export default class Game {
     })
   }
 
-  solidify () {
+  #solidify () {
     this.piece.shape.grid.forEach((row, y) => {
       row.forEach((value, x) => {
         if (value === 1) {
@@ -64,8 +64,8 @@ export default class Game {
     })
   }
 
-  project () {
-    while (this.checkCollision()) {
+  #project () {
+    while (this.#checkCollision()) {
       this.piece.fall()
     }
     this.#handleCollision()
@@ -77,19 +77,19 @@ export default class Game {
       alert('Game Over!')
       this.reset()
     } else {
-      this.solidify()
+      this.#solidify()
       this.piece.reset()
-      this.checkCompletedRows()
+      this.#checkCompletedRows()
     }
   }
 
   update (time) {
     delta = time - lastTime
-    if (delta > 200) {
+    if (delta > MILLISECONDS_PER_FRAME) {
       this.board.draw()
       this.piece.draw()
       this.piece.fall()
-      if (!this.checkCollision()) {
+      if (!this.#checkCollision()) {
         this.#handleCollision()
       }
       lastTime = time
@@ -97,17 +97,9 @@ export default class Game {
     window.requestAnimationFrame(this.update)
   }
 
-  checkCompletedRows () {
-    const completedRowsIndexes = []
-    this.board.grid.forEach((row, rowIndex) => {
-      if (row.every((value) => value === 1)) {
-        completedRowsIndexes.push(rowIndex)
-      }
-    })
-    completedRowsIndexes.forEach(rowToDeleteIndex => {
-      this.board.grid.splice(rowToDeleteIndex, 1)
-      this.board.grid.unshift(Array(WIDTH).fill(0))
-    })
+  #checkCompletedRows () {
+    const numRowsRemoved = this.board.removeCompletedRows()
+    this.points += numRowsRemoved * POINTS_PER_ROW
   }
 
   start () {
