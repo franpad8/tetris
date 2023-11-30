@@ -6,15 +6,25 @@ let lastTime = 0
 let delta = 0
 export default class Game {
   init () {
-    const canvas = document.getElementById('canvas')
-    this.context = canvas.getContext('2d')
-    this.context.fillStyle = '#000'
-    this.context.rect(0, 0, WIDTH * PIXELS_PER_SQUARE, HEIGHT * PIXELS_PER_SQUARE)
-    this.context.fill()
+    this.#initCanvas()
     this.board = new Board(this.context)
     this.piece = new Piece(this.context)
     this.update = this.update.bind(this)
+    this.points = 0
     this.#registerEventsListeners()
+  }
+
+  #initCanvas () {
+    this.context = document.getElementById('canvas').getContext('2d')
+    this.context.fillStyle = '#000'
+    this.context.rect(0, 0, WIDTH * PIXELS_PER_SQUARE, HEIGHT * PIXELS_PER_SQUARE)
+    this.context.fill()
+  }
+
+  #drawPoints () {
+    this.context.font = '26px Arial'
+    this.context.fillStyle = '#fff'
+    this.context.fillText(`${this.points}`, 20, 50)
   }
 
   #registerEventsListeners () {
@@ -92,6 +102,7 @@ export default class Game {
       if (!this.#checkCollision()) {
         this.#handleCollision()
       }
+      this.#drawPoints()
       lastTime = time
     }
     window.requestAnimationFrame(this.update)
@@ -109,5 +120,6 @@ export default class Game {
   reset () {
     this.board.reset()
     this.piece.reset()
+    this.points = 0
   }
 }

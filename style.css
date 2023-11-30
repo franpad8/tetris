@@ -12,6 +12,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+body {
+  background-color: bisque;
+}
+
 canvas {
   display:block;
   margin: 0 auto;

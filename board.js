@@ -10,20 +10,35 @@ export default class Board {
   }
 
   setValueAt (value, x, y) {
-    this.grid[y][x] = value
+    if (this.grid[y]) {
+      this.grid[y][x] = value
+    }
   }
 
   draw () {
     this.grid.forEach((row, y) => {
-      this.grid[y].forEach((value, x) => {
-        if (value === 0) {
-          this.context.fillStyle = 'black'
-        } else if (value === 1) {
-          this.context.fillStyle = 'yellow'
-        }
+      // if row is completed then paint it white
+      if (row.every((value) => value === 1)) {
+        this.context.fillStyle = '#fff'
+        this.grid[y].forEach((_, x) => {
+          this.context.fillRect(
+            x * PIXELS_PER_SQUARE,
+            y * PIXELS_PER_SQUARE,
+            PIXELS_PER_SQUARE,
+            PIXELS_PER_SQUARE
+          )
+        })
+      } else {
+        this.grid[y].forEach((value, x) => {
+          if (value === 0) {
+            this.context.fillStyle = 'black'
+          } else if (value === 1) {
+            this.context.fillStyle = 'yellow'
+          }
 
-        this.context.fillRect(x * PIXELS_PER_SQUARE, y * PIXELS_PER_SQUARE, PIXELS_PER_SQUARE, PIXELS_PER_SQUARE)
-      })
+          this.context.fillRect(x * PIXELS_PER_SQUARE, y * PIXELS_PER_SQUARE, PIXELS_PER_SQUARE, PIXELS_PER_SQUARE)
+        })
+      }
     })
   }
 
@@ -38,10 +53,13 @@ export default class Board {
         completedRowsIndexes.push(rowIndex)
       }
     })
-    completedRowsIndexes.forEach(rowToDeleteIndex => {
-      this.grid.splice(rowToDeleteIndex, 1)
-      this.grid.unshift(Array(WIDTH).fill(0))
-    })
+
+    setTimeout(() => {
+      completedRowsIndexes.forEach(rowToDeleteIndex => {
+        this.grid.splice(rowToDeleteIndex, 1)
+        this.grid.unshift(Array(WIDTH).fill(0))
+      })
+    }, 500)
 
     return completedRowsIndexes.length
   }
