@@ -79,6 +79,7 @@ export default class Game {
     } else {
       this.solidify()
       this.piece.reset()
+      this.checkCompletedRows()
     }
   }
 
@@ -94,6 +95,19 @@ export default class Game {
       lastTime = time
     }
     window.requestAnimationFrame(this.update)
+  }
+
+  checkCompletedRows () {
+    const completedRowsIndexes = []
+    this.board.grid.forEach((row, rowIndex) => {
+      if (row.every((value) => value === 1)) {
+        completedRowsIndexes.push(rowIndex)
+      }
+    })
+    completedRowsIndexes.forEach(rowToDeleteIndex => {
+      this.board.grid.splice(rowToDeleteIndex, 1)
+      this.board.grid.unshift(Array(WIDTH).fill(0))
+    })
   }
 
   start () {
