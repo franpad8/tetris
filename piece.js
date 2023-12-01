@@ -1,5 +1,6 @@
-import { PIXELS_PER_SQUARE, WIDTH, MOVEMENT_DIRECTION, COLORS } from './const'
+import { WIDTH, MOVEMENT_DIRECTION, COLORS, VALUES } from './const'
 import { newRandomShape } from './shape'
+import { drawSquare } from './utils'
 
 export default class Piece {
   constructor (context) {
@@ -8,6 +9,12 @@ export default class Piece {
     this.context = context
   }
 
+  /* returns true if the piece is in the top of the board */
+  isInTheTop () {
+    return this.position.y === 0
+  }
+
+  /* Move piece towards the given direction */
   move (direction) {
     switch (direction) {
       case MOVEMENT_DIRECTION.ROTATE:
@@ -27,13 +34,12 @@ export default class Piece {
 
   draw () {
     this.shape.grid.forEach((row, y) => row.forEach((value, x) => {
-      if (value > 0) {
-        this.context.fillStyle = COLORS[value]
-        this.context.fillRect(
-          (this.position.x + x) * PIXELS_PER_SQUARE,
-          (this.position.y + y) * PIXELS_PER_SQUARE,
-          PIXELS_PER_SQUARE,
-          PIXELS_PER_SQUARE)
+      if (value !== VALUES.EMPTY_BLOCK) {
+        drawSquare(this.context, {
+          x: this.position.x + x,
+          y: this.position.y + y,
+          color: COLORS[value]
+        })
       }
     }))
   }

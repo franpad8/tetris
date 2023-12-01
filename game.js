@@ -1,4 +1,12 @@
-import { WIDTH, HEIGHT, PIXELS_PER_SQUARE, POINTS_PER_ROW, MOVEMENT_DIRECTION, MILLISECONDS_PER_FRAME } from './const'
+import {
+  WIDTH,
+  HEIGHT,
+  PIXELS_PER_SQUARE,
+  POINTS_PER_ROW,
+  MOVEMENT_DIRECTION,
+  MILLISECONDS_PER_FRAME,
+  VALUES
+} from './const'
 import Board from './board'
 import Piece from './piece'
 
@@ -57,18 +65,18 @@ export default class Game {
 
   #checkCollision () {
     return this.piece.shape.grid.every((row, y) => {
-      return row.every((value, x) => {
-        return value === 0 || (this.board.getValueAt(this.piece.position.x + x, this.piece.position.y + y) < 1 &&
-                               this.board.getValueAt(this.piece.position.x + x, this.piece.position.y + y) !== undefined)
+      return row.every((shapeValue, x) => {
+        return shapeValue === VALUES.EMPTY_BLOCK ||
+          this.board.isEmptyBlock(this.piece.position.x + x, this.piece.position.y + y)
       })
     })
   }
 
   #solidify () {
     this.piece.shape.grid.forEach((row, y) => {
-      row.forEach((value, x) => {
-        if (value > 0) {
-          this.board.setValueAt(value, this.piece.position.x + x, this.piece.position.y + y)
+      row.forEach((shapeValue, x) => {
+        if (shapeValue !== VALUES.EMPTY_BLOCK) {
+          this.board.setValueAt(shapeValue, this.piece.position.x + x, this.piece.position.y + y)
         }
       })
     })
@@ -83,7 +91,7 @@ export default class Game {
 
   #handleCollision () {
     this.piece.move(MOVEMENT_DIRECTION.UP)
-    if (this.piece.position.y === 0) { // Game Over
+    if (this.piece.isInTheTop()) { // Game Over
       alert('Game Over!')
       this.reset()
     } else {

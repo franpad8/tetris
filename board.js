@@ -1,11 +1,12 @@
-import { COLORS, HEIGHT, PIXELS_PER_SQUARE, WIDTH } from './const'
+import { COLORS, HEIGHT, VALUES, WIDTH } from './const'
+import { drawSquare } from './utils'
 export default class Board {
   constructor (context) {
-    this.grid = Array(HEIGHT).fill(0).map(x => Array(WIDTH).fill(0))
+    this.grid = Array(HEIGHT).fill(0).map(x => Array(WIDTH).fill(VALUES.EMPTY_BLOCK))
     this.context = context
   }
 
-  getValueAt (x, y) {
+  #getValueAt (x, y) {
     return this.grid[y]?.[x]
   }
 
@@ -15,36 +16,45 @@ export default class Board {
     }
   }
 
+  isEmptyBlock (x, y) {
+    return this.#getValueAt(x, y) === VALUES.EMPTY_BLOCK
+  }
+
+  isInvalidBlock (x, y) {
+    return this.#getValueAt(x, y) === VALUES.INVALID_BLOCK
+  }
+
+  isFilledBlock (x, y) {
+    return !this.isEmptyBlock(x, y) && !this.isInvalidBlock(x, y)
+  }
+
+  #isCompletedRow (y) {
+    return this.grid[y].every((_, x) => this.isFilledBlock(x, y))
+  }
+
   draw () {
     this.grid.forEach((row, y) => {
       // if row is completed then paint it white before it gets deleted
-      if (row.every((value) => value > 0)) {
-        this.context.fillStyle = '#fff'
-        this.grid[y].forEach((_, x) => {
-          this.context.fillRect(
-            x * PIXELS_PER_SQUARE,
-            y * PIXELS_PER_SQUARE,
-            PIXELS_PER_SQUARE,
-            PIXELS_PER_SQUARE
-          )
+      if (this.#isCompletedRow(y)) {
+        row.forEach((_, x) => {
+          drawSquare(this.context, { color: '#fff', x, y })
         })
       } else {
-        this.grid[y].forEach((value, x) => {
-          this.context.fillStyle = COLORS[value]
-          this.context.fillRect(x * PIXELS_PER_SQUARE, y * PIXELS_PER_SQUARE, PIXELS_PER_SQUARE, PIXELS_PER_SQUARE)
+        row.forEach((value, x) => {
+          drawSquare(this.context, { color: COLORS[value], x, y })
         })
       }
     })
   }
 
   reset () {
-    this.grid = Array(HEIGHT).fill(0).map(x => Array(WIDTH).fill(0))
+    this.grid = Array(HEIGHT).fill(0).map(x => Array(WIDTH).fill(VALUES.EMPTY_BLOCK))
   }
 
   removeCompletedRows () {
     const completedRowsIndexes = []
-    this.grid.forEach((row, rowIndex) => {
-      if (row.every((value) => value > 0)) {
+    this.grid.forEach((_, rowIndex) => {
+      if (this.#isCompletedRow(rowIndex)) {
         completedRowsIndexes.push(rowIndex)
       }
     })
@@ -52,7 +62,7 @@ export default class Board {
     setTimeout(() => {
       completedRowsIndexes.forEach(rowToDeleteIndex => {
         this.grid.splice(rowToDeleteIndex, 1)
-        this.grid.unshift(Array(WIDTH).fill(0))
+        this.grid.unshift(Array(WIDTH).fill(VALUES.EMPTY_BLOCK))
       })
     }, 500)
 

@@ -21,3 +21,8 @@ export const COLORS = [
   '#f0f',
   '#0ff'
 ]
+
+export const VALUES = {
+  EMPTY_BLOCK: 0,
+  INVALID_BLOCK: undefined
+}
