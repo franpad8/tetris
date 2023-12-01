@@ -1,29 +1,22 @@
 class Shape {
   constructor () {
-    this.grid = []
+    this.currentIndex = 0
+    this.grid = this.grids[this.currentIndex]
   }
 
-  // Transponse Matrix
   rotate () {
-    const rows = []
-    for (let i = 0; i < this.grid[0].length; i++) {
-      const row = []
-      for (let j = 0; j < this.grid.length; j++) {
-        row.push(this.grid[j][i])
-      }
-      rows.push(row)
-    }
-
-    this.grid = rows
+    this.currentIndex = (this.currentIndex + 1) % this.grids.length
+    this.grid = this.grids[this.currentIndex]
   }
 }
 
 class Square extends Shape {
-  constructor () {
-    super()
-    this.grid = [
-      [1, 1],
-      [1, 1]
+  get grids () {
+    return [
+      [
+        [1, 1],
+        [1, 1]
+      ]
     ]
   }
 }
@@ -51,20 +44,9 @@ class L extends Shape {
       ]
     ]
   }
-
-  constructor () {
-    super()
-    this.currentIndex = 0
-    this.grid = this.grids[this.currentIndex]
-  }
-
-  rotate () {
-    this.currentIndex = (this.currentIndex + 1) % this.grids.length
-    this.grid = this.grids[this.currentIndex]
-  }
 }
 
-class ReversedL extends L {
+class ReversedL extends Shape {
   get grids () {
     return [
       [
@@ -90,33 +72,49 @@ class ReversedL extends L {
 }
 
 class Stick extends Shape {
-  constructor () {
-    super()
-    this.grid = [
-      [1],
-      [1],
-      [1],
-      [1]
+  get grids () {
+    return [
+      [
+        [1],
+        [1],
+        [1],
+        [1]
+      ],
+      [
+        [1, 1, 1, 1]
+      ]
     ]
   }
 }
 
 class Zeta extends Shape {
-  constructor () {
-    super()
-    this.grid = [
-      [0, 1, 1],
-      [1, 1, 0]
+  get grids () {
+    return [
+      [
+        [0, 1, 1],
+        [1, 1, 0]
+      ],
+      [
+        [1, 0],
+        [1, 1],
+        [0, 1]
+      ]
     ]
   }
 }
 
 class ReversedZeta extends Shape {
-  constructor () {
-    super()
-    this.grid = [
-      [1, 1, 0],
-      [0, 1, 1]
+  get grids () {
+    return [
+      [
+        [1, 1, 0],
+        [0, 1, 1]
+      ],
+      [
+        [0, 1],
+        [1, 1],
+        [1, 0]
+      ]
     ]
   }
 }
