@@ -1,4 +1,4 @@
-import { PIXELS_PER_SQUARE, WIDTH, MOVEMENT_DIRECTION } from './const'
+import { PIXELS_PER_SQUARE, WIDTH, MOVEMENT_DIRECTION, COLORS } from './const'
 import { newRandomShape } from './shape'
 
 export default class Piece {
@@ -27,8 +27,8 @@ export default class Piece {
 
   draw () {
     this.shape.grid.forEach((row, y) => row.forEach((value, x) => {
-      if (value === 1) {
-        this.context.fillStyle = 'orangered'
+      if (value > 0) {
+        this.context.fillStyle = COLORS[value]
         this.context.fillRect(
           (this.position.x + x) * PIXELS_PER_SQUARE,
           (this.position.y + y) * PIXELS_PER_SQUARE,

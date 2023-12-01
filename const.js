@@ -11,3 +11,13 @@ export const MOVEMENT_DIRECTION = {
   DOWN: 'ArrowDown',
   ROTATE: 'Rotate'
 }
+
+export const COLORS = [
+  '#000',
+  '#f00',
+  '#0f0',
+  '#00f',
+  '#ff0',
+  '#f0f',
+  '#0ff'
+]

@@ -1,4 +1,4 @@
-import { HEIGHT, PIXELS_PER_SQUARE, WIDTH } from './const'
+import { COLORS, HEIGHT, PIXELS_PER_SQUARE, WIDTH } from './const'
 export default class Board {
   constructor (context) {
     this.grid = Array(HEIGHT).fill(0).map(x => Array(WIDTH).fill(0))
@@ -17,8 +17,8 @@ export default class Board {
 
   draw () {
     this.grid.forEach((row, y) => {
-      // if row is completed then paint it white
-      if (row.every((value) => value === 1)) {
+      // if row is completed then paint it white before it gets deleted
+      if (row.every((value) => value > 0)) {
         this.context.fillStyle = '#fff'
         this.grid[y].forEach((_, x) => {
           this.context.fillRect(
@@ -30,12 +30,7 @@ export default class Board {
         })
       } else {
         this.grid[y].forEach((value, x) => {
-          if (value === 0) {
-            this.context.fillStyle = 'black'
-          } else if (value === 1) {
-            this.context.fillStyle = 'yellow'
-          }
-
+          this.context.fillStyle = COLORS[value]
           this.context.fillRect(x * PIXELS_PER_SQUARE, y * PIXELS_PER_SQUARE, PIXELS_PER_SQUARE, PIXELS_PER_SQUARE)
         })
       }
@@ -49,7 +44,7 @@ export default class Board {
   removeCompletedRows () {
     const completedRowsIndexes = []
     this.grid.forEach((row, rowIndex) => {
-      if (row.every((value) => value === 1)) {
+      if (row.every((value) => value > 0)) {
         completedRowsIndexes.push(rowIndex)
       }
     })

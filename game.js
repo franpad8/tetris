@@ -58,7 +58,7 @@ export default class Game {
   #checkCollision () {
     return this.piece.shape.grid.every((row, y) => {
       return row.every((value, x) => {
-        return value !== 1 || (this.board.getValueAt(this.piece.position.x + x, this.piece.position.y + y) !== 1 &&
+        return value === 0 || (this.board.getValueAt(this.piece.position.x + x, this.piece.position.y + y) < 1 &&
                                this.board.getValueAt(this.piece.position.x + x, this.piece.position.y + y) !== undefined)
       })
     })
@@ -67,8 +67,8 @@ export default class Game {
   #solidify () {
     this.piece.shape.grid.forEach((row, y) => {
       row.forEach((value, x) => {
-        if (value === 1) {
-          this.board.setValueAt(1, this.piece.position.x + x, this.piece.position.y + y)
+        if (value > 0) {
+          this.board.setValueAt(value, this.piece.position.x + x, this.piece.position.y + y)
         }
       })
     })

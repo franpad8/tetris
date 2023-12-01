@@ -1,12 +1,17 @@
+import { COLORS } from './const'
+
 class Shape {
   constructor () {
     this.currentIndex = 0
     this.grid = this.grids[this.currentIndex]
+    this.colorIndex = 1 + Math.floor(Math.random() * (Object.keys(COLORS).length - 1))
+    this.grid = this.grid.map(row => row.map(value => value === 1 ? this.colorIndex : value))
   }
 
   rotate () {
     this.currentIndex = (this.currentIndex + 1) % this.grids.length
     this.grid = this.grids[this.currentIndex]
+    this.grid = this.grid.map(row => row.map(value => value === 1 ? this.colorIndex : value))
   }
 }
 
