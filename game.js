@@ -5,7 +5,8 @@ import {
   POINTS_PER_ROW,
   MOVEMENT_DIRECTION,
   MILLISECONDS_PER_FRAME,
-  VALUES
+  VALUES,
+  BACKGROUND_COLOR
 } from './const'
 import Board from './board'
 import Piece from './piece'
@@ -24,7 +25,7 @@ export default class Game {
 
   #initCanvas () {
     this.context = document.getElementById('canvas').getContext('2d')
-    this.context.fillStyle = '#000'
+    this.context.fillStyle = BACKGROUND_COLOR
     this.context.rect(0, 0, WIDTH * PIXELS_PER_SQUARE, HEIGHT * PIXELS_PER_SQUARE)
     this.context.fill()
   }

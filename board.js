@@ -1,4 +1,4 @@
-import { COLORS, HEIGHT, VALUES, WIDTH } from './const'
+import { COLORS, HEIGHT, SQUARE_OFFSET, VALUES, WIDTH } from './const'
 import { drawSquare } from './utils'
 export default class Board {
   constructor (context) {
@@ -41,7 +41,8 @@ export default class Board {
         })
       } else {
         row.forEach((value, x) => {
-          drawSquare(this.context, { color: COLORS[value], x, y })
+          const offset = this.isFilledBlock(x, y) ? SQUARE_OFFSET : 0
+          drawSquare(this.context, { color: COLORS[value], x, y, offset })
         })
       }
     })

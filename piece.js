@@ -1,4 +1,4 @@
-import { WIDTH, MOVEMENT_DIRECTION, COLORS, VALUES } from './const'
+import { WIDTH, MOVEMENT_DIRECTION, COLORS, VALUES, SQUARE_OFFSET } from './const'
 import { newRandomShape } from './shape'
 import { drawSquare } from './utils'
 
@@ -38,7 +38,8 @@ export default class Piece {
         drawSquare(this.context, {
           x: this.position.x + x,
           y: this.position.y + y,
-          color: COLORS[value]
+          color: COLORS[value],
+          offset: SQUARE_OFFSET
         })
       }
     }))
