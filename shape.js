@@ -119,13 +119,39 @@ class ReversedZeta extends Shape {
   }
 }
 
+class T extends Shape {
+  get grids () {
+    return [
+      [
+        [1, 1, 1],
+        [0, 1, 0]
+      ],
+      [
+        [1, 0],
+        [1, 1],
+        [1, 0]
+      ],
+      [
+        [0, 1, 0],
+        [1, 1, 1]
+      ],
+      [
+        [0, 1],
+        [1, 1],
+        [0, 1]
+      ]
+    ]
+  }
+}
+
 const SHAPE_TYPES = {
   0: Square,
   1: L,
   2: Zeta,
   3: Stick,
   4: ReversedZeta,
-  5: ReversedL
+  5: ReversedL,
+  6: T
 }
 
 export function newRandomShape () {
