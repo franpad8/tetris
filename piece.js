@@ -11,7 +11,7 @@ export default class Piece {
 
   /* returns true if the piece is in the top of the board */
   isInTheTop () {
-    return this.position.y === 0
+    return this.position.y <= 0
   }
 
   /* Move piece towards the given direction */

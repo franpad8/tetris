@@ -31,7 +31,7 @@ export default class Game {
   }
 
   #drawPoints () {
-    this.context.font = '26px Arial'
+    this.context.font = '26px Courier New'
     this.context.fillStyle = '#fff'
     this.context.fillText(`${this.points}`, 20, 50)
   }
@@ -40,15 +40,13 @@ export default class Game {
     window.addEventListener('keydown', (event) => {
       switch (event.key) {
         case MOVEMENT_DIRECTION.LEFT:
-          this.piece.move(MOVEMENT_DIRECTION.LEFT)
-          if (!this.#checkCollision()) {
-            this.piece.move(MOVEMENT_DIRECTION.RIGHT)
+          if (this.#checkCollision(event.key)) {
+            this.piece.move(MOVEMENT_DIRECTION.LEFT)
           }
           break
         case MOVEMENT_DIRECTION.RIGHT:
-          this.piece.move(MOVEMENT_DIRECTION.RIGHT)
-          if (!this.#checkCollision()) {
-            this.piece.move(MOVEMENT_DIRECTION.LEFT)
+          if (this.#checkCollision(event.key)) {
+            this.piece.move(MOVEMENT_DIRECTION.RIGHT)
           }
           break
         case MOVEMENT_DIRECTION.UP:
@@ -64,11 +62,26 @@ export default class Game {
     })
   }
 
-  #checkCollision () {
+  #checkCollision (direction) {
     return this.piece.shape.grid.every((row, y) => {
       return row.every((shapeValue, x) => {
-        return shapeValue === VALUES.EMPTY_BLOCK ||
-          this.board.isEmptyBlock(this.piece.position.x + x, this.piece.position.y + y)
+        if (direction === MOVEMENT_DIRECTION.DOWN) {
+          return shapeValue === VALUES.EMPTY_BLOCK ||
+            (!this.board.isInvalidBlock(this.piece.position.x + x, this.piece.position.y + y + 1) &&
+            this.board.isEmptyBlock(this.piece.position.x + x, this.piece.position.y + y + 1))
+        } else if (direction === MOVEMENT_DIRECTION.RIGHT) {
+          return shapeValue === VALUES.EMPTY_BLOCK ||
+            (!this.board.isInvalidBlock(this.piece.position.x + x + 1, this.piece.position.y + y) &&
+            this.board.isEmptyBlock(this.piece.position.x + x + 1, this.piece.position.y + y))
+        } else if (direction === MOVEMENT_DIRECTION.LEFT) {
+          return shapeValue === VALUES.EMPTY_BLOCK ||
+            (!this.board.isInvalidBlock(this.piece.position.x + x - 1, this.piece.position.y + y) &&
+            this.board.isEmptyBlock(this.piece.position.x + x - 1, this.piece.position.y + y))
+        } else {
+          return shapeValue === VALUES.EMPTY_BLOCK ||
+            (!this.board.isInvalidBlock(this.piece.position.x + x, this.piece.position.y + y) &&
+            this.board.isEmptyBlock(this.piece.position.x + x, this.piece.position.y + y))
+        }
       })
     })
   }
@@ -84,22 +97,16 @@ export default class Game {
   }
 
   #project () {
-    while (this.#checkCollision()) {
+    while (this.#checkCollision(MOVEMENT_DIRECTION.DOWN)) {
       this.piece.fall()
     }
     this.#handleCollision()
   }
 
   #handleCollision () {
-    this.piece.move(MOVEMENT_DIRECTION.UP)
-    if (this.piece.isInTheTop()) { // Game Over
-      alert('Game Over!')
-      this.reset()
-    } else {
-      this.#solidify()
-      this.piece.reset()
-      this.#checkCompletedRows()
-    }
+    this.#solidify()
+    this.piece.reset()
+    this.#checkCompletedRows()
   }
 
   update (time) {
@@ -107,11 +114,17 @@ export default class Game {
     if (delta > MILLISECONDS_PER_FRAME) {
       this.board.draw()
       this.piece.draw()
-      this.piece.fall()
-      if (!this.#checkCollision()) {
-        this.#handleCollision()
-      }
       this.#drawPoints()
+      if (!this.#checkCollision(MOVEMENT_DIRECTION.DOWN)) {
+        if (this.piece.isInTheTop()) {
+          alert('Game Over!')
+          this.reset()
+          return
+        }
+        this.#handleCollision()
+      } else {
+        this.piece.fall()
+      }
       lastTime = time
     }
     window.requestAnimationFrame(this.update)

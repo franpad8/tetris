@@ -12,11 +12,55 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%;
+}
+
 body {
   background-color: bisque;
+  font-family: 'Press Start 2P', Arial;
+  font-size: 1.6rem;
 }
 
 canvas {
-  display:block;
+  display: none;
   margin: 0 auto;
+}
+
+.menu {
+  width: 500px;
+  height: 900px;
+  background: black;
+  margin: 0 auto;
+}
+
+.menu__list {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4rem;
+  list-style: none;
+}
+
+.menu__item {
+  font-size: 2.5rem;
+  border-bottom: 2px solid transparent;
+  transition: border .2s;
+}
+
+.menu__item:hover {
+  border-bottom: 2px solid white;
+  cursor: pointer;
 }
