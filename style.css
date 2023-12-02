@@ -64,3 +64,16 @@ canvas {
   border-bottom: 2px solid white;
   cursor: pointer;
 }
+
+.endgame {
+  width: 500px;
+  height: 900px;
+  background: black;
+  margin: 0 auto;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  cursor: pointer;
+}

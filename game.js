@@ -13,6 +13,7 @@ import Piece from './piece'
 
 let lastTime = 0
 let delta = 0
+let isGameOver = false
 export default class Game {
   init () {
     this.#initCanvas()
@@ -111,21 +112,23 @@ export default class Game {
 
   update (time) {
     delta = time - lastTime
+    isGameOver = false
     if (delta > MILLISECONDS_PER_FRAME) {
       this.board.draw()
       this.piece.draw()
       this.#drawPoints()
       if (!this.#checkCollision(MOVEMENT_DIRECTION.DOWN)) {
-        if (this.piece.isInTheTop()) {
-          alert('Game Over!')
-          this.reset()
-          return
-        }
+        isGameOver = this.piece.isInTheTop()
         this.#handleCollision()
       } else {
         this.piece.fall()
       }
       lastTime = time
+    }
+
+    if (isGameOver) {
+      window.dispatchEvent(new CustomEvent('finish'))
+      return
     }
     window.requestAnimationFrame(this.update)
   }
@@ -143,5 +146,6 @@ export default class Game {
     this.board.reset()
     this.piece.reset()
     this.points = 0
+    isGameOver = false
   }
 }
