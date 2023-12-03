@@ -1,4 +1,4 @@
-import { COLORS, HEIGHT, SQUARE_OFFSET, VALUES, WIDTH } from './const'
+import { BACKGROUND_COLOR, COLORS, HEIGHT, SQUARE_OFFSET, VALUES, WIDTH } from './const'
 import { drawSquare } from './utils'
 export default class Board {
   constructor (context) {
@@ -37,7 +37,7 @@ export default class Board {
       // if row is completed then paint it white before it gets deleted
       if (this.#isCompletedRow(y)) {
         row.forEach((_, x) => {
-          drawSquare(this.context, { color: '#fff', x, y })
+          drawSquare(this.context, { color: BACKGROUND_COLOR, x, y })
         })
       } else {
         row.forEach((value, x) => {

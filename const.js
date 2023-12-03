@@ -1,11 +1,13 @@
-export const WIDTH = 15
+export const APP_WIDTH = document.getElementById('app').clientWidth
+export const APP_HEIGHT = document.getElementById('app').clientHeight
 export const HEIGHT = 30
-export const PIXELS_PER_SQUARE = 30
-export const SQUARE_OFFSET = 5
+export const WIDTH = Math.floor(HEIGHT * APP_WIDTH / APP_HEIGHT)
+export const PIXELS_PER_SQUARE = APP_HEIGHT / HEIGHT
+export const SQUARE_OFFSET = PIXELS_PER_SQUARE / 6
 export const POINTS_PER_ROW = 100
 export const MILLISECONDS_PER_FRAME = 200
-export const PIXELS_PER_PREVIEW_SQUARE = 10
-export const PREVIEW_SQUARE_OFFSET = 2
+export const PIXELS_PER_PREVIEW_SQUARE = PIXELS_PER_SQUARE / 3
+export const PREVIEW_SQUARE_OFFSET = PIXELS_PER_PREVIEW_SQUARE / 5
 
 export const MOVEMENT_DIRECTION = {
   RIGHT: 'ArrowRight',
