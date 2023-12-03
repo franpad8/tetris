@@ -19,6 +19,7 @@ export default class Game {
     this.#initCanvas()
     this.board = new Board(this.context)
     this.piece = new Piece(this.context)
+    this.nextPiece = new Piece(this.context)
     this.update = this.update.bind(this)
     this.points = 0
     this.#registerEventsListeners()
@@ -106,7 +107,8 @@ export default class Game {
 
   #handleCollision () {
     this.#solidify()
-    this.piece.reset()
+    this.piece = this.nextPiece
+    this.nextPiece = new Piece(this.context)
     this.#checkCompletedRows()
   }
 
@@ -116,6 +118,7 @@ export default class Game {
     if (delta > MILLISECONDS_PER_FRAME) {
       this.board.draw()
       this.piece.draw()
+      this.nextPiece.drawAsPreview()
       this.#drawPoints()
       if (!this.#checkCollision(MOVEMENT_DIRECTION.DOWN)) {
         isGameOver = this.piece.isInTheTop()
@@ -144,7 +147,8 @@ export default class Game {
 
   reset () {
     this.board.reset()
-    this.piece.reset()
+    this.piece = new Piece(this.context)
+    this.nextPiece = new Piece(this.context)
     this.points = 0
     isGameOver = false
   }

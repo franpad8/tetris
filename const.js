@@ -4,6 +4,8 @@ export const PIXELS_PER_SQUARE = 30
 export const SQUARE_OFFSET = 5
 export const POINTS_PER_ROW = 100
 export const MILLISECONDS_PER_FRAME = 200
+export const PIXELS_PER_PREVIEW_SQUARE = 10
+export const PREVIEW_SQUARE_OFFSET = 2
 
 export const MOVEMENT_DIRECTION = {
   RIGHT: 'ArrowRight',
