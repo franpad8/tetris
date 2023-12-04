@@ -4,7 +4,7 @@ It's a Javascript implementation of the classis Tetris Game using Canvas library
 
 ## Play it Live
 
-Soon to be published
+<https://tetris-franpad8.vercel.app/>
 
 ## How to run in development
 
