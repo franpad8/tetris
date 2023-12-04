@@ -68,30 +68,34 @@ export default class Game {
     })
   }
 
+  /* Returns true if NO collision occurs in the given direction */
   #checkCollision (direction) {
+    let xOffset = 0
+    let yOffset = 0
+    let xPos = 0
+    let yPos = 0
+
     return this.piece.shape.grid.every((row, y) => {
       return row.every((shapeValue, x) => {
         if (direction === MOVEMENT_DIRECTION.DOWN) {
-          return shapeValue === VALUES.EMPTY_BLOCK ||
-            (!this.board.isInvalidBlock(this.piece.position.x + x, this.piece.position.y + y + 1) &&
-            this.board.isEmptyBlock(this.piece.position.x + x, this.piece.position.y + y + 1))
+          yOffset = 1
         } else if (direction === MOVEMENT_DIRECTION.RIGHT) {
-          return shapeValue === VALUES.EMPTY_BLOCK ||
-            (!this.board.isInvalidBlock(this.piece.position.x + x + 1, this.piece.position.y + y) &&
-            this.board.isEmptyBlock(this.piece.position.x + x + 1, this.piece.position.y + y))
+          xOffset = 1
         } else if (direction === MOVEMENT_DIRECTION.LEFT) {
-          return shapeValue === VALUES.EMPTY_BLOCK ||
-            (!this.board.isInvalidBlock(this.piece.position.x + x - 1, this.piece.position.y + y) &&
-            this.board.isEmptyBlock(this.piece.position.x + x - 1, this.piece.position.y + y))
-        } else {
-          return shapeValue === VALUES.EMPTY_BLOCK ||
-            (!this.board.isInvalidBlock(this.piece.position.x + x, this.piece.position.y + y) &&
-            this.board.isEmptyBlock(this.piece.position.x + x, this.piece.position.y + y))
+          xOffset = -1
         }
+
+        xPos = this.piece.position.x + x + xOffset
+        yPos = this.piece.position.y + y + yOffset
+
+        return shapeValue === VALUES.EMPTY_BLOCK ||
+            (!this.board.isInvalidBlock(xPos, yPos) &&
+            this.board.isEmptyBlock(xPos, yPos))
       })
     })
   }
 
+  /* Turns the current piece into a fallen block */
   #solidify () {
     this.piece.shape.grid.forEach((row, y) => {
       row.forEach((shapeValue, x) => {
@@ -102,6 +106,7 @@ export default class Game {
     })
   }
 
+  /* Drop the current piece down into the bottom at once */
   #project () {
     while (this.#checkCollision(MOVEMENT_DIRECTION.DOWN)) {
       this.piece.fall()
