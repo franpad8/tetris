@@ -36,6 +36,10 @@ canvas {
   display: none;
 }
 
+p {
+  text-align: center;
+}
+
 #app {
   background-color: var(--bg-color);
   height: 100vh;
@@ -72,11 +76,20 @@ canvas {
   cursor: pointer;
 }
 
+.bestscore-section {
+  width: 100%;
+  height: 100%;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  cursor: pointer;
+}
+
 .endgame {
   width: 100%;
   height: 100%;
-  background: black;
-  margin: 0 auto;
   display: none;
   flex-direction: column;
   justify-content: center;

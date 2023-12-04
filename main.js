@@ -8,18 +8,40 @@ function show (element, displayType = 'block') {
 function hide (element) {
   element.style.display = 'none'
 }
+
+function getBestScore () {
+  return window.localStorage.getItem('bestscore') || 0
+}
+
+function saveScore (score) {
+  const currentBestScore = getBestScore()
+  if (!currentBestScore || currentBestScore < score) {
+    window.localStorage.setItem('bestscore', score)
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('canvas')
   const menu = document.querySelector('.menu')
+  const bestscoreSection = document.querySelector('.bestscore-section')
   const endgame = document.querySelector('.endgame')
   const points = document.querySelector('.points')
+  const bestScoreText = document.querySelector('.bestscore__value')
 
   document.querySelectorAll('.menu__item').forEach(menuItem => {
-    menuItem.addEventListener('click', () => {
-      hide(menu)
-      show(canvas)
-      game.start()
-    })
+    if (menuItem.classList.contains('startgame')) {
+      menuItem.addEventListener('click', () => {
+        hide(menu)
+        show(canvas)
+        game.start()
+      })
+    } else if (menuItem.classList.contains('bestscore')) {
+      menuItem.addEventListener('click', () => {
+        hide(menu)
+        show(bestscoreSection, 'flex')
+        bestScoreText.textContent = getBestScore()
+      })
+    }
   })
 
   window.addEventListener('finish', () => {
@@ -30,8 +52,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   endgame.addEventListener('click', () => {
     hide(endgame)
-    show(menu)
+    saveScore(game.points)
     game.reset()
+    show(menu)
+  })
+
+  bestscoreSection.addEventListener('click', () => {
+    hide(bestscoreSection)
+    show(menu)
   })
 })
 
